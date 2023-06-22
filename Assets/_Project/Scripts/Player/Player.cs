@@ -1,3 +1,5 @@
+using LiquidX;
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditorInternal;
@@ -17,6 +19,7 @@ public class Player : MonoBehaviour
 		{
 			Debug.LogError("Multiple instances of Player is in the scene.", this);
 			Destroy(this.gameObject);
+			return;
 		}
 	}
 }

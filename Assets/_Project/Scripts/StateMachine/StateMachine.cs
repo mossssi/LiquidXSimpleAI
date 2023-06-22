@@ -23,8 +23,10 @@ namespace LiquidX.SM
             _stateFactory = new StateFactory(this);
             ChangeState(_stateFactory.Patrolling());
             _perception = GetComponent<AIPerception>();
-            _perception.OnPlayerFound += PlayerFound;
-            _perception.OnPlayerLost += PlayerLost;
+
+            _perception.OnPlayerFound += OnPlayerFound;
+            _perception.OnPlayerLost += OnPlayerLost;
+            _perception.OnSuspect += OnSuspect;
         }
 
         private void Update()
@@ -49,15 +51,20 @@ namespace LiquidX.SM
             _currentState.EnterState();
         }
 
-        private void PlayerFound(Player player)
+        private void OnPlayerFound(Player player)
         {
             ChangeState(_stateFactory.Chasing());
         }
 
-        private void PlayerLost()
+        private void OnPlayerLost()
         {
             
 		}
+
+        private void OnSuspect(Vector3 position)
+        {
+            ChangeState(_stateFactory.Searching(position));
+        }
 
         public void SetPatrolling()
         {
@@ -74,8 +81,9 @@ namespace LiquidX.SM
 
 		private void OnDisable()
 		{
-			_perception.OnPlayerFound -= PlayerFound;
-			_perception.OnPlayerLost -= PlayerLost;
+			_perception.OnPlayerFound -= OnPlayerFound;
+			_perception.OnPlayerLost -= OnPlayerLost;
+			_perception.OnSuspect -= OnSuspect;
 		}
 	}
 }

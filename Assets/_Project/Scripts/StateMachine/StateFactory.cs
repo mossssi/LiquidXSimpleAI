@@ -1,4 +1,5 @@
 using LiquidX.SM.States;
+using UnityEngine;
 
 namespace LiquidX.SM
 {
@@ -8,6 +9,7 @@ namespace LiquidX.SM
 
 		private PatrolState _patrolState;
 		private ChaseState _chaseState;
+		private SearchState _searchState;
 
 		public StateFactory(StateMachine stateMachine)
 		{
@@ -30,6 +32,16 @@ namespace LiquidX.SM
 				_chaseState = new ChaseState(_stateMachine);
 			}
 			return _chaseState;
+		}
+
+		public SearchState Searching(Vector3 position)
+		{
+			if (_searchState == null)
+			{
+				_searchState = new SearchState(_stateMachine);
+			}
+			_searchState.SetDestination(position);
+			return _searchState;
 		}
 	}
 }

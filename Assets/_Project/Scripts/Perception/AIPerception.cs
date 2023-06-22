@@ -6,21 +6,27 @@ using UnityEngine;
 
 namespace LiquidX.Perception
 {
-    public class AIPerception : MonoBehaviour
+    public class AIPerception : MonoBehaviour, INoiseListener
     {
         public Action<Player> OnPlayerFound;
         public Action OnPlayerLost;
+        public Action<Vector3> OnSuspect;
 
-        [SerializeField] private Vector3 _eyeOffset;
+		[Header("Vision")]
+		[SerializeField] private Vector3 _eyeOffset;
         [SerializeField] private float _viewRadius;
         [SerializeField] private float _viewAngle;
         [SerializeField] private LayerMask _playerMask;
         [SerializeField] private LayerMask _obstacleMask;
         [SerializeField] private float _searchEverySeconds;
         [SerializeField] private float _lostDelay;
+        [Header("Hearing")]
+        [SerializeField] private float _hearingThreshold = 0.25f;
 
         private Player _detectedPlayer;
         private float _seenTime;
+        private bool _noiseHeard;
+        private Vector3 _noisePosition;
 
         public Vector3 EyeOffset => _eyeOffset;
         public float ViewRadius => _viewRadius;
@@ -110,5 +116,18 @@ namespace LiquidX.Perception
                 }
             }
         }
-    }
+
+        // interface
+		public void OnNoiseRecived(Vector3 position, float amplitude)
+		{
+            if (_detectedPlayer != null) return;
+
+            if (amplitude >= _hearingThreshold)
+            {
+                //Debug.LogFormat($"Hearing Noise {amplitude}");
+                _noiseHeard = true;
+                OnSuspect?.Invoke(position);
+			}
+		}
+	}
 }
