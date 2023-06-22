@@ -7,6 +7,7 @@ namespace LiquidX.SM
 		private StateMachine _stateMachine;
 
 		private PatrolState _patrolState;
+		private ChaseState _chaseState;
 
 		public StateFactory(StateMachine stateMachine)
 		{
@@ -20,6 +21,15 @@ namespace LiquidX.SM
 				_patrolState = new PatrolState(_stateMachine);
 			}
 			return _patrolState;
+		}
+
+		public ChaseState Chasing()
+		{
+			if (_chaseState == null)
+			{
+				_chaseState = new ChaseState(_stateMachine);
+			}
+			return _chaseState;
 		}
 	}
 }
