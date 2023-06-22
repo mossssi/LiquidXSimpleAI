@@ -18,6 +18,7 @@ namespace LiquidX.SM.States
 		public override void EnterState()
 		{
 			_guard.Agent.speed = _patrolSpeed;
+			// When ever starts patrolling selects the nearest waypoint
 			_targetWaypointIndex = _guard.Path.GetClosestWaypointIndex(_guard.transform.position);
 			SetWayPoint(_targetWaypointIndex);
 		}
@@ -46,6 +47,7 @@ namespace LiquidX.SM.States
 
 		private void SetNextWaypoint()
 		{
+			// handles loop or ping-pong behaviors
 			_targetWaypointIndex = _guard.Path.GetNextWayPointIndex(_targetWaypointIndex, _loopWaypoint);
 			SetWayPoint(_targetWaypointIndex);
 		}

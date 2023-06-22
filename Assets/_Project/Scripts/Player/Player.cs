@@ -1,8 +1,3 @@
-using LiquidX;
-using StarterAssets;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -11,6 +6,7 @@ public class Player : MonoBehaviour
 
 	private void Awake()
 	{
+		// Making player singleton
 		if (Instance == null)
 		{
 			Instance = this;

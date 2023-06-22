@@ -26,6 +26,7 @@ namespace LiquidX
 
 		private void Start()
 		{
+			// Make noise from running few times in a second
 			StartCoroutine(CheckMovementNoise(_noiseMakingPeriod));
 		}
 
@@ -41,6 +42,11 @@ namespace LiquidX
 			}
 		}
 
+		/// <summary>
+		/// This method emits noise which will be received with specified decay along distance
+		/// </summary>
+		/// <param name="radius"></param>
+		/// <param name="amplitude"></param>
 		public void MakeNoise(float radius, float amplitude)
 		{
 			Collider[] colliders = Physics.OverlapSphere(transform.position, radius, _noiseListenerMask);
@@ -60,6 +66,7 @@ namespace LiquidX
 			}
 		}
 
+		// Calls from animation events
 		private void OnLand(AnimationEvent animationEvent)
 		{
 			if (animationEvent.animatorClipInfo.weight > 0.5f)

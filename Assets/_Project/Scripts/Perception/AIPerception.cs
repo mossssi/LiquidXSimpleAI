@@ -36,20 +36,24 @@ namespace LiquidX.Perception
 
 		private void Start()
 		{
+            // For optimization we call checking with a little delay each time
             StartCoroutine(CheckForPlayer(_searchEverySeconds));
 		}
 
-		public Vector3 AngleToDirection(float angle, bool global)
+        /// <summary>
+        /// Get direction of an angle from transform.forward vector
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+		public Vector3 AngleToDirection(float angle)
         {
-            if (!global)
-            {
-                angle += transform.eulerAngles.y;
-            }
+            angle += transform.eulerAngles.y;
             return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0f, Mathf.Cos(angle * Mathf.Deg2Rad));
         }
 
         private IEnumerator CheckForPlayer(float delay)
         {
+            // Infinite loop
             while (true)
             {
                 yield return new WaitForSeconds(delay);
@@ -62,6 +66,7 @@ namespace LiquidX.Perception
             Collider[] colliders = Physics.OverlapSphere(transform.position + _eyeOffset, _viewRadius, _playerMask);
             Vector3 origin = transform.position + _eyeOffset;
             
+            // if player is not near guard try losing it
             if (colliders.Length == 0)
             {
 				if (_detectedPlayer != null)
@@ -80,9 +85,10 @@ namespace LiquidX.Perception
                 direction.Normalize();
                 var angle = Vector3.Angle(transform.forward, direction);
                 var distance = Vector3.Distance(origin, player.transform.position);
+                // When player is in field of view and there is no obstacle in-between
                 if (angle < _viewAngle / 2f && !Physics.Raycast(origin, direction, distance, _obstacleMask))
                 {
-                        PlayerVisible(player);
+                    PlayerVisible(player);
                 }
                 else
                 {
@@ -98,6 +104,7 @@ namespace LiquidX.Perception
         private void PlayerVisible(Player player)
         {
             _seenTime = Time.time;
+            // Runs one time
 			if (_detectedPlayer == null)
             {
                 _detectedPlayer = player;
@@ -109,6 +116,7 @@ namespace LiquidX.Perception
         {
             if (Time.time - _seenTime > _lostDelay)
             {
+                // Runs one time
                 if (_detectedPlayer != null)
                 {
                     _detectedPlayer = null;
@@ -122,7 +130,8 @@ namespace LiquidX.Perception
 		{
             if (_detectedPlayer != null) return;
 
-            if (amplitude >= _hearingThreshold)
+			// Adjust guard hearing power with _hearingThreshold field 
+			if (amplitude >= _hearingThreshold)
             {
                 //Debug.LogFormat($"Hearing Noise {amplitude}");
                 _noiseHeard = true;

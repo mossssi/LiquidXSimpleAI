@@ -32,12 +32,13 @@ namespace LiquidX.SM.States
 			
 			if (_guard.Agent.remainingDistance < 0.5f)
 			{
+				// this section runs just one time
 				if (!_searching)
 				{
 					_searching = true;
 					_reachSearchAreaTime = Time.time;
 				}
-				else if (Time.time - _reachSearchAreaTime > _searchDelay)
+				else if (Time.time - _reachSearchAreaTime > _searchDelay) // After a delay return to patrolling
 				{
 					_stateMachine.SetPatrolling();
 				}

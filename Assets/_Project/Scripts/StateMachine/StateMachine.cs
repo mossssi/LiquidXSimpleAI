@@ -21,12 +21,15 @@ namespace LiquidX.SM
         {
             _guard = guard;
             _stateFactory = new StateFactory(this);
-            ChangeState(_stateFactory.Patrolling());
             _perception = GetComponent<AIPerception>();
-
+            
+            // Actions which will be called on detecting or losing the player
             _perception.OnPlayerFound += OnPlayerFound;
             _perception.OnPlayerLost += OnPlayerLost;
             _perception.OnSuspect += OnSuspect;
+
+            // Initial state
+            ChangeState(_stateFactory.Patrolling());
         }
 
         private void Update()
@@ -53,19 +56,26 @@ namespace LiquidX.SM
 
         private void OnPlayerFound(Player player)
         {
+            // When player is found chase it immediately 
             ChangeState(_stateFactory.Chasing());
         }
 
         private void OnPlayerLost()
         {
-            
+            // TODO: Maybe another state for losing player
 		}
 
+        // Calls on hearing noise without seeing player
         private void OnSuspect(Vector3 position)
         {
-            ChangeState(_stateFactory.Searching(position));
+            var state = _stateFactory.Searching();
+            state.SetDestination(position);
+			ChangeState(state);
         }
 
+        /// <summary>
+        /// For set patrolling from anywhere
+        /// </summary>
         public void SetPatrolling()
         {
 			ChangeState(_stateFactory.Patrolling());
@@ -81,6 +91,7 @@ namespace LiquidX.SM
 
 		private void OnDisable()
 		{
+            // Removing listeners on disable for unwanted behaviours
 			_perception.OnPlayerFound -= OnPlayerFound;
 			_perception.OnPlayerLost -= OnPlayerLost;
 			_perception.OnSuspect -= OnSuspect;

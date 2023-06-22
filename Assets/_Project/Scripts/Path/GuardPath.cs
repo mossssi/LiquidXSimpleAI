@@ -19,6 +19,12 @@ namespace LiquidX.Path
 			}
 		}
 
+		/// <summary>
+		/// Handles looping and ping-pong patrolling behaviors
+		/// </summary>
+		/// <param name="currentIndex"></param>
+		/// <param name="loop"></param>
+		/// <returns></returns>
 		public int GetNextWayPointIndex(int currentIndex, bool loop = true)
 		{
 			if (loop)
@@ -36,6 +42,12 @@ namespace LiquidX.Path
 			}
 		}
 
+		/// <summary>
+		/// Get the position of waypoint at index
+		/// Returns a nullable Vector3 to know if the index is correct
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
 		public Vector3? GetWaypoint(int index)
 		{
 			if (index >= Count || index < 0) return null;
@@ -65,6 +77,11 @@ namespace LiquidX.Path
 			}
 		}
 
+		/// <summary>
+		/// Get index of the closest waypoint to the position
+		/// </summary>
+		/// <param name="position"></param>
+		/// <returns></returns>
 		public int GetClosestWaypointIndex(Vector3 position)
 		{
 			float minDistance = float.MaxValue;

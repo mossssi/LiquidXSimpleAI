@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace LiquidX.SM
 {
+	// This is a basic factory pattern for making objects in one place
 	public class StateFactory
 	{
 		private StateMachine _stateMachine;
@@ -34,13 +35,12 @@ namespace LiquidX.SM
 			return _chaseState;
 		}
 
-		public SearchState Searching(Vector3 position)
+		public SearchState Searching()
 		{
 			if (_searchState == null)
 			{
 				_searchState = new SearchState(_stateMachine);
 			}
-			_searchState.SetDestination(position);
 			return _searchState;
 		}
 	}

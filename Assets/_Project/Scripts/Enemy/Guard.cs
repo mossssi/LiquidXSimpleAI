@@ -46,6 +46,7 @@ namespace LiquidX.Enemy
 			_animator.SetFloat(_animIDMotionSpeed, 1f);
 		}
 
+		// Using int hashes to prevent type errors
 		private void AssignAnimationIDs()
 		{
 			_animIDSpeed = Animator.StringToHash("Speed");
@@ -55,6 +56,7 @@ namespace LiquidX.Enemy
 			_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
 		}
 
+		// Calls from animation events
 		private void OnFootstep(AnimationEvent animationEvent)
 		{
 			if (animationEvent.animatorClipInfo.weight > 0.5f)
@@ -63,6 +65,7 @@ namespace LiquidX.Enemy
 			}
 		}
 
+		// Calls from animation events
 		private void OnLand(AnimationEvent animationEvent)
 		{
 			if (animationEvent.animatorClipInfo.weight > 0.5f)
