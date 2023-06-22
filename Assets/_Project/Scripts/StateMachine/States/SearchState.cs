@@ -10,6 +10,7 @@ namespace LiquidX.SM.States
 		private bool _chasing, _searching;
 		private float _searchDelay = 2f;
 		private float _reachSearchAreaTime;
+		private float _searchSpeed = 3f;
 
 		public SearchState(StateMachine stateMachine) : base(stateMachine)
 		{
@@ -18,6 +19,7 @@ namespace LiquidX.SM.States
 		public override void EnterState()
 		{
 			_chasing = true;
+			_guard.Agent.speed = _searchSpeed;
 			_guard.Agent.SetDestination(_destination);
 		}
 

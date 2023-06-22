@@ -9,6 +9,7 @@ namespace LiquidX.SM.States
 		private int _targetWaypointIndex;
 		private float _waitTimer = 0;
 		private bool _loopWaypoint = true;
+		private float _patrolSpeed = 2f;
 
 		public PatrolState(StateMachine stateMachine) : base(stateMachine)
 		{
@@ -16,6 +17,7 @@ namespace LiquidX.SM.States
 
 		public override void EnterState()
 		{
+			_guard.Agent.speed = _patrolSpeed;
 			_targetWaypointIndex = _guard.Path.GetClosestWaypointIndex(_guard.transform.position);
 			SetWayPoint(_targetWaypointIndex);
 		}

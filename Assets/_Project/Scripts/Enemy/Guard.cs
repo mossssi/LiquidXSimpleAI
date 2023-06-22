@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using LiquidX.SM;
 using LiquidX.Path;
+using UnityEngine.InputSystem.XR;
 
 namespace LiquidX.Enemy
 {
@@ -12,6 +13,14 @@ namespace LiquidX.Enemy
 
 		private NavMeshAgent _agent;
 		private StateMachine _stateMachine;
+		private Animator _animator;
+
+		// animation IDs
+		private int _animIDSpeed;
+		private int _animIDGrounded;
+		private int _animIDJump;
+		private int _animIDFreeFall;
+		private int _animIDMotionSpeed;
 
 		public NavMeshAgent Agent => _agent;
 		public GuardPath Path => _path;
@@ -20,11 +29,46 @@ namespace LiquidX.Enemy
 		{
 			_agent = GetComponent<NavMeshAgent>();
 			_stateMachine = GetComponent<StateMachine>();
+			_animator = GetComponent<Animator>();
 		}
 
 		private void Start()
 		{
+			AssignAnimationIDs();
 			_stateMachine.Initialize(this);
+		}
+
+		private void Update()
+		{
+			_animator.SetBool(_animIDGrounded, true);
+			var speed = _agent.velocity.magnitude;
+			_animator.SetFloat(_animIDSpeed, speed);
+			_animator.SetFloat(_animIDMotionSpeed, 1f);
+		}
+
+		private void AssignAnimationIDs()
+		{
+			_animIDSpeed = Animator.StringToHash("Speed");
+			_animIDGrounded = Animator.StringToHash("Grounded");
+			_animIDJump = Animator.StringToHash("Jump");
+			_animIDFreeFall = Animator.StringToHash("FreeFall");
+			_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+		}
+
+		private void OnFootstep(AnimationEvent animationEvent)
+		{
+			if (animationEvent.animatorClipInfo.weight > 0.5f)
+			{
+				
+			}
+		}
+
+		private void OnLand(AnimationEvent animationEvent)
+		{
+			if (animationEvent.animatorClipInfo.weight > 0.5f)
+			{
+
+			}
 		}
 	}
 }

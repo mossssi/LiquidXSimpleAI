@@ -59,5 +59,13 @@ namespace LiquidX
 				}
 			}
 		}
+
+		private void OnLand(AnimationEvent animationEvent)
+		{
+			if (animationEvent.animatorClipInfo.weight > 0.5f)
+			{
+				MakeNoise(_maxNoiseRadius, 1f);
+			}
+		}
 	}
 }
