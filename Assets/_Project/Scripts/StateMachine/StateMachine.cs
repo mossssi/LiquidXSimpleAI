@@ -81,6 +81,17 @@ namespace LiquidX.SM
 			ChangeState(_stateFactory.Patrolling());
 		}
 
+        /// <summary>
+        /// For set suspect from anywhere
+        /// </summary>
+        /// <param name="position"></param>
+        public void SetSuspect(Vector3 position)
+        {
+			var state = _stateFactory.Searching();
+			state.SetDestination(position);
+			ChangeState(state);
+		}
+
 		private void OnDrawGizmos()
 		{
 			if(_currentState != null)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Cinemachine.CinemachineOrbitalTransposer;
 
 namespace LiquidX.SM.States
 {
@@ -11,6 +12,7 @@ namespace LiquidX.SM.States
 		private float _searchDelay = 2f;
 		private float _reachSearchAreaTime;
 		private float _chaseSpeed = 4f;
+		private float _stoppingDistance = 1f;
 
 		public ChaseState(StateMachine stateMachine) : base(stateMachine)
 		{
@@ -26,21 +28,26 @@ namespace LiquidX.SM.States
 		{
 			if (_stateMachine.Perception.Player != null)
 			{
-				_destination = Player.Instance.transform.position;
+				var playerPosition = Player.Instance.transform.position;
+				var direction = (playerPosition - _guard.transform.position).normalized * _stoppingDistance;
+				_destination = playerPosition - direction;
 				_guard.Agent.SetDestination(_destination);
+				if (_guard.Agent.velocity.sqrMagnitude < 1)
+				{
+					Vector3 delta = new Vector3(playerPosition.x - _guard.transform.position.x, 0.0f, playerPosition.z - _guard.transform.position.z);
+					if (delta != Vector3.zero)
+					{
+						Quaternion rotation = Quaternion.LookRotation(delta);
+						_guard.transform.rotation = rotation;
+					}
+				}
 			}
 			
-			if (_guard.Agent.remainingDistance < 0.5f)
+			if (_guard.Agent.remainingDistance < 0.25f)
 			{
-				// this section runs just one time
-				if (!_searching)
+				if (!_stateMachine.Perception.CanSeePlayer)
 				{
-					_searching = true;
-					_reachSearchAreaTime = Time.time;
-				}
-				else if (Time.time - _reachSearchAreaTime > _searchDelay) // After a delay return to patrolling
-				{
-					_stateMachine.SetPatrolling();
+					_stateMachine.SetSuspect(_destination);
 				}
 			}
 		}
