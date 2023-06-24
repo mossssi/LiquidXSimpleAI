@@ -138,5 +138,31 @@ namespace LiquidX.Perception
                 OnSuspect?.Invoke(position);
 			}
 		}
+
+        // Drawing cone with Gizmos for fun :)
+		private void OnDrawGizmos()
+		{
+            var color = _detectedPlayer == null ? Color.yellow : Color.red;
+            Gizmos.color = color;
+			Vector3 origin = transform.position + _eyeOffset;
+			Vector3 leftLine = AngleToDirection(-_viewAngle / 2f);
+			Vector3 rightLine = AngleToDirection(_viewAngle / 2f);
+            Vector3 upLine = Quaternion.AngleAxis(90f, transform.forward) * rightLine;
+            Vector3 downLine = Quaternion.AngleAxis(90f, transform.forward) * leftLine;
+            float coneRadius = _viewRadius * Mathf.Sin(_viewAngle * Mathf.Deg2Rad / 2f);
+            float coneHeight = Mathf.Sqrt(_viewRadius * _viewRadius - coneRadius * coneRadius);
+            float angleSign = _viewAngle > 180f ? -1 : 1;
+
+			Gizmos.DrawLine(origin, origin + leftLine * _viewRadius);
+			Gizmos.DrawLine(origin, origin + rightLine * _viewRadius);
+			Gizmos.DrawLine(origin, origin + upLine * _viewRadius);
+			Gizmos.DrawLine(origin, origin + downLine * _viewRadius);
+#if UNITY_EDITOR
+            UnityEditor.Handles.color = color;
+            UnityEditor.Handles.DrawWireDisc(origin + transform.forward * coneHeight * angleSign, transform.forward, coneRadius);
+            UnityEditor.Handles.DrawWireArc(origin, transform.up, leftLine, _viewAngle, _viewRadius);
+            UnityEditor.Handles.DrawWireArc(origin, transform.right, upLine, _viewAngle, _viewRadius);
+#endif
+		}
 	}
 }

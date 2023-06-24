@@ -7,7 +7,7 @@ namespace LiquidX.Perception
     public class AIPerceptionEditor : Editor
     {
 		// Using for visualizing guard field of view
-		private void OnSceneGUI()
+		/*private void OnSceneGUI()
 		{
 			AIPerception perception = (AIPerception)target;
 			Handles.color = Color.yellow;
@@ -24,6 +24,6 @@ namespace LiquidX.Perception
 				Handles.color = Color.red;
 				Handles.DrawLine(origin, perception.Player.transform.position);
 			}
-		}
+		}*/
 	}
 }
